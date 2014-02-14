@@ -1,0 +1,36 @@
+{
+  "network": {
+    "hostname": "bo-cns4103.thop.2iij.net",
+    "gateway": "10.142.146.1",
+    "eth0": {
+      "ipaddr": "10.167.16.36",
+      "netmask": "255.255.255.0"
+    },
+    "eth1": {
+      "ipaddr": "10.146.34.93",
+      "netmask": "255.255.255.192"
+    },
+    "eth2": {
+      "ipaddr": "10.142.146.16",
+      "netmask": "255.255.255.0"
+    },
+    "route": [
+      "# tHOP",
+      "any net 10.146.0.0 netmask 255.255.0.0 gw 10.146.34.65 dev eth1",
+      "any net 172.20.224.0 netmask 255.255.224.0 gw 10.146.34.65 dev eth1",
+      "# office",
+      "any net 192.168.0.0 netmask 255.255.0.0 gw 10.167.16.1 dev eth0",
+      "any net 10.131.0.0 netmask 255.255.0.0 gw 10.167.16.1 dev eth0",
+      "# tBOS (old)",
+      "any net 192.168.203.0 netmask 255.255.255.0 gw 10.142.146.1 dev eth2",
+      "any net 192.168.204.0 netmask 255.255.255.0 gw 10.142.146.1 dev eth2"
+    ]
+  },
+  "run_list": [
+    "role[env_dev]",
+    "role[bo-cns]",
+    "role[bo-cns03]",
+    "recipe[linux::default]",
+    "recipe[bind::default]"
+  ]
+}

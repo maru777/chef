@@ -1,0 +1,8 @@
+{
+  "name": "bo-dns",
+  "chef_type": "role",
+  "json_class": "Chef::Role",
+  "default_attributes": {
+    "dns_type": "bo-dns"
+  }
+}

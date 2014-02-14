@@ -1,0 +1,16 @@
+{
+  "network": {
+    "hostname": "bo-dns4100.thop.2iij.net",
+    "gateway": "10.146.34.65",
+    "eth1": {
+      "ipaddr": "10.146.34.85",
+      "netmask": "255.255.255.192"
+    }
+  },
+  "run_list": [
+    "role[env_dev]",
+    "role[bo-dns]",
+    "recipe[linux::default]",
+    "recipe[bind::default]"
+  ]
+}
