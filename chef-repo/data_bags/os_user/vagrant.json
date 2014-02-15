@@ -1,8 +1,7 @@
 {
   "id": "vagrant",
-  "password": "$1$YhnGPReO$LiKRVZGB6DwNQBnmPEDRA1",
+  "password": "$1$7Q9pKWoj$soH2ddP6QMnaeHFgi3Ken1",
   "uid": 5000,
-  "gid": "vagrant",
   "home": "/home/vagrant",
   "shell": "/bin/bash"
 }

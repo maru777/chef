@@ -17,7 +17,6 @@ u = data_bag_item("os_user", "vagrant")
 user "vagrant" do
   password u["password"]
   uid u["uid"]
-  gid u["vagrant"]
   home u["home"]
   shell u["shell"]
   supports :manage_home => true
@@ -37,6 +36,15 @@ group "wheel" do
   action :modify
   members g["members"]
   append true
+end
+
+execute "change passwd" do
+  command <<-eoh
+    for i in root vagrant
+    do
+      echo "$i" | passwd --stdin $i
+    done
+  eoh
 end
 
 # setenforce 0‚ÅˆêŽž“I‚ÉSELinux‚ð–³Œø‰»‚µA
@@ -71,7 +79,7 @@ end
 end
 
 template "/etc/hosts" do
-  source "hosts.erb"
+  source "etc/hosts.erb"
   owner "root"
   group "root"
   mode "0644"
@@ -88,19 +96,29 @@ template "/etc/sysconfig/iptables" do
   action :create
 end
 
-file "/etc/sudoers" do
-  rc = Chef::Util::FileEdit.new(path)
-  rc.search_file_replace(/(^Defaults\s+requiretty$)/, "#\\1")
-  content rc.send(:contents).join
+template "/etc/sudoers" do
+  source "etc/sudoers.erb"
+  owner "root"
+  group "root"
+  mode "0440"
   action :create
 end
 
+=begin
 file "/etc/sudoers" do
   rc = Chef::Util::FileEdit.new(path)
   rc.insert_line_if_no_match(/^%wheel\s*ALL=\(ALL\)\s*NOPASSWD:\s*ALL$/, "\n%wheel        ALL=(ALL)       NOPASSWD:ALL\n")
   content rc.send(:contents).join
   action :create
 end
+
+file "/etc/sudoers" do
+  rc = Chef::Util::FileEdit.new(path)
+  rc.search_file_replace(/(^Defaults\s+requiretty$)/, "#\\1")
+  content rc.send(:contents).join
+  action :create
+end
+=end
 
 
 
@@ -117,5 +135,22 @@ template "/home/vagrant/.ssh/authorized_keys" do
   group "vagrant"
   mode "0600"
   action :create
+end
+
+## guestaddition
+mount "guest addition" do
+  not_if "ps -e |grep -q -i vboxservice"
+  mount_point "/mnt"
+  device "/dev/dvd"
+  notifies :run, "execute[ga install]"
+end
+
+execute "ga install" do
+  action :nothing
+  command <<-eoh
+    /mnt/VBoxLinuxAdditions.run || true
+    umount /mnt
+    ps -e |grep -q -i vboxservice
+  eoh
 end
 

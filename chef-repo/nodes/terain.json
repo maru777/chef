@@ -1,5 +1,4 @@
 {
-  "hostname": "terain.localhost",
   "run_list": [
     "recipe[linux::default]"
   ]
