@@ -13,20 +13,31 @@ user "root" do
   action :modify
 end
 
+u = data_bag_item("os_user", "vagrant")
+user "vagrant" do
+  password u["password"]
+  uid u["uid"]
+  gid u["vagrant"]
+  home u["home"]
+  shell u["shell"]
+  supports :manage_home => true
+  action :create
+end
 
-group "www-data" do
-  action :modify
-  members "maintenance"
+g = data_bag_item("os_group", "vagrant")
+group "vagrant" do
+  action :create
+  gid g["gid"]
+  members g["members"]
   append true
 end
 
-
-u = data_bag_item("os_user", "vagrant")
-user "bo-chef" do
-  password u["password"]
+g = data_bag_item("os_group", "wheel")
+group "wheel" do
   action :modify
+  members g["members"]
+  append true
 end
-
 
 # setenforce 0‚Åˆê“I‚ÉSELinux‚ğ–³Œø‰»‚µA
 # /etc/selinux/config‚Ìì¬‚ğ’Ê’m‚·‚é
@@ -99,3 +110,12 @@ directory "/home/vagrant/.ssh" do
   mode "0755"
   action :create
 end
+
+template "/home/vagrant/.ssh/authorized_keys" do
+  source "key/authorized_keys.erb"
+  owner "vagrant"
+  group "vagrant"
+  mode "0600"
+  action :create
+end
+
