@@ -14,7 +14,10 @@ alias vdir='ls --color=auto --format=long'
 alias ll='ls -l'                              # long list
 alias la='ls -A'                              # all but . and ..
 alias l='ls -CF'                              #
-alias vim='vim -u /usr/share/vim/vimrc'
+alias vim='vim -u /etc/my_env/vimrc'
 alias vi='vim'
-export PS1="[\[\e]0;\w\a\]\[\e[32m\]\u\[\e[0m\]@\[\e[32m\]\h \[\e[33m\]\W\[\e[0m\]]\\$ "
+alias cat='pygmentize -O style=monokai -f console256 -g'
 
+export PS1="[\[\e]0;\w\a\]\[\e[32m\]\u\[\e[0m\]@\[\e[32m\]\h \[\e[33m\]\W\[\e[0m\]]\\$ "
+export LESS='-R'
+export LESSOPEN='|/etc/my_env/lessfilter %s'
