@@ -26,6 +26,14 @@ execute "nettools" do
   action :run
 end
 
+%w{ pry }.each do |pack|
+  gem_package pack do
+    action :install
+  end
+end
+
+## environment define
+
 directory "/etc/my_env" do
   owner "root"
   group "root"
@@ -37,7 +45,8 @@ file "/etc/profile" do
   rc = Chef::Util::FileEdit.new(path)
   my_profile = '[ -f /etc/my_env/profile ] && . /etc/my_env/profile'
   rc.insert_line_if_no_match( my_profile, "#{my_profile}\n")
-  content rc.send(:contents).join
+  rc.write_file
+#  content rc.send(:contents).join
   action :create
 end
 
